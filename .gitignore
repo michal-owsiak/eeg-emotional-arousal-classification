@@ -1,2 +1,6 @@
 *.dat
 *.part
+.idea/
+*.iml
+.DS_Store
+data_preprocessed_python/
