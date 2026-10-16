@@ -18,7 +18,7 @@ This study evaluates the feasibility of classifying binary emotional arousal (hi
 EEG signals from 32 participants, each exposed to 40 music video trials (63 seconds each), were segmented into overlapping windows of 5 seconds with a 2.5-second step (50% overlap). For each window, absolute and relative bandpower was computed across four frequency bands (theta, alpha, beta, gamma) from 32 EEG channels, yielding 256 features per window. The resulting dataset contained 30,720 labeled windows (training + test). Feature selection was performed using random forest importance scores, and the top 50 features were used to train a neural network, along with logistic regression, random forest, SVM, and XGBoost classifiers. Performance was evaluated using accuracy and ROC AUC metrics.
 
 **Results:**  
-All models showed comparable, limited performance that exceeded random guessing, though the overall predictive power remained modest. Test accuracy ranged from 0.59 to 0.63, and ROC AUC from 0.64 to 0.65. The highest accuracy was achieved by the SVM classifier (63%), while the best ROC AUC score was obtained by the neural network model (65%).
+All models achieved modest predictive performance, with test accuracy ranging from 60% to 63% and ROC AUC ranging from 0.62 to 0.67. The SVM classifier achieved both the highest accuracy (63%) and the highest ROC AUC (0.67). Trial-level permutation tests were subsequently performed to assess whether these scores exceeded chance-level performance. Both accuracy and ROC AUC were significantly above chance for all models after Holm correction for multiple comparisons (adjusted *p* < 0.05).
 
 **Conclusions:**  
 The results suggest that EEG bandpower features carry only limited and hard-to-extract information about arousal, leading to modest model performance across classifiers. These findings highlight both the potential and limitations of EEG-based emotion recognition and suggest the need for more sophisticated feature engineering or multimodal data to improve performance in affective computing tasks.
@@ -27,13 +27,7 @@ The results suggest that EEG bandpower features carry only limited and hard-to-e
 
 ## **Tools used**
 
-**Languages, frameworks and environments:**
-```
-> Python
-> Jupyter Notebook
-> Markdown
-```
-**Libraries and packages:**
+**Python libraries and packages:**
 ```
 > TensorFlow / Keras
 > scikit-learn
@@ -68,7 +62,7 @@ Four traditional models were tested for comparison:
 - Support Vector Machine (SVM)  
 - XGBoost  
 
-Each model was evaluated using accuracy, ROC AUC, precision, recall, and F1-score.
+Each model was evaluated using accuracy, ROC AUC, precision, recall, and F1-score. Above-chance performance (for accuracy and ROC AUC) was assessed using one-sided, within-participant trial-level permutation tests with Holm correction for multiple comparisons.
 
 **Visualizations include:**
 - Raw sample EEG signal along with spectrogram
@@ -80,23 +74,25 @@ Each model was evaluated using accuracy, ROC AUC, precision, recall, and F1-scor
 
 ## **Results and conclusions**
 
-| Model               | Accuracy | ROC AUC |
-|--------------------|----------|---------|
-| Neural network (MLP) | 0.61     | 0.65    |
-| Logistic regression  | 0.59     | 0.64    |
-| Random forest        | 0.61     | 0.64    |
-| SVM                  | 0.63     | 0.64    |
-| XGBoost              | 0.60     | 0.64    |
+| Model                | Accuracy | ROC AUC | Accuracy *p* (Holm) | ROC AUC *p* (Holm) |
+|----------------------|----------|---------|---------------------|--------------------|
+| Neural network (MLP) | 0.61     | 0.65    | 0.0144              | 0.0152             |
+| Logistic regression  | 0.60     | 0.62    | 0.0032              | 0.0220             |
+| Random forest        | 0.61     | 0.65    | 0.0024              | 0.0020             |
+| SVM                  | 0.63     | 0.67    | 0.0020              | 0.0020             |
+| XGBoost              | 0.60     | 0.64    | 0.0030              | 0.0020             |
+
+*p*-values compare each metric against chance using one-sided, within-participant trial-level permutation tests, with Holm correction across all 10 model/metric tests.
 
 ---
 
 ### **Key observations:**
 
-- All models perform **only slightly better than random guessing** (which would yield ~0.50 accuracy and ROC AUC).
-- The **neural network (MLP)** achieves the highest **ROC AUC (0.65)**, indicating a marginally better ability to distinguish between the two classes.
-- **SVM** obtains the highest **accuracy (0.63)**, though its ROC AUC is the same as other classical models.
-- The **differences in performance across models are minimal**, suggesting that the EEG-based classification task is inherently difficult and possibly limited by the signal-to-noise ratio or data representation.
-- The consistent performance across models indicates that no single algorithm provides a decisive advantage for this task.
+- All models achieve **statistically significant above-chance performance** in both accuracy and ROC AUC, as confirmed by trial-level permutation tests with Holm correction (adjusted *p* < 0.05), although their overall predictive performance remains modest.
+- **SVM** achieves both the highest **accuracy (0.63)** and the highest **ROC AUC (0.67)**.
+- The **neural network (MLP)** and **random forest** achieve comparable point estimates: accuracy of 0.61 and ROC AUC of 0.65 when rounded to two decimal places.
+- Accuracy ranges from 0.60 to 0.63 and ROC AUC from 0.62 to 0.67, indicating modest predictive performance across models.
+- The permutation tests compare each model against chance, not against other models; they do not establish whether the differences between algorithms are statistically significant.
 
 ---
 
